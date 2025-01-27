@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.gfspl": "plaintext",
+        "*.exe": "code-text-binary",
+        "*.asm": "plaintext",
+        "xstring": "cpp"
+    }
+}
