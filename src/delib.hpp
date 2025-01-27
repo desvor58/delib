@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 typedef          char   i8;
 typedef          short  i16;
@@ -91,5 +92,27 @@ namespace de
         if (a + b < minlimit)
             return minlimit;
         return a + b;
+    }
+
+    // разделяет строку по символу splitter
+    std::vector<std::string> split(std::string str, char splitter)
+    {
+        std::vector<std::string> res {};
+        std::string buf = "";
+
+        for (char c : str) {
+            if (c == splitter) {
+                if (!buf.empty()) {
+                    res.push_back(buf);
+                    buf = "";
+                    continue;
+                }
+            }
+            buf += c;
+        }
+        if (!buf.empty()) {
+            res.push_back(buf);
+        }
+        return res;
     }
 };
