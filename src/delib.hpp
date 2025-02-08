@@ -58,9 +58,22 @@ namespace de
     {
         std::string res;
 
-        if (end == 0) end = str.size();
+        if (end == -1) end = str.size();
         for (int i = start; i < end; i++) {
             res += str[i];
+        } 
+        return res;
+    }
+
+    // срез вектора от start до end, не включая end
+    template<typename T>
+    std::vector<T> slise(std::vector<T> vec, int start, int end)
+    {
+        std::vector<T> res;
+
+        if (end == -1) end = vec.size();
+        for (int i = start; i < end; i++) {
+            res.push_back(vec[i]);
         } 
         return res;
     }
@@ -72,13 +85,14 @@ namespace de
     // возвращает строку без пробелов в начале и конце
     std::string trim(std::string str)
     {
+        if (str.empty()) return "";
         std::string res = "";
         u32 start = 0;
         u32 end = str.size()-1;
 
         while (str[start] == ' ') start++;
         while (str[end] == ' ')   end--;
-        for (int i = start; i < end; i++) {
+        for (int i = start; i < end+1; i++) {
             res += str[i];
         }
         return res;
@@ -114,5 +128,41 @@ namespace de
             res.push_back(buf);
         }
         return res;
+    }
+
+    // функция обратная split
+    // принимает вектор, а возвращает одну строку
+    std::string merger(std::vector<std::string> strs, char splitter)
+    {
+        std::string res = "";
+        std::string s = "";
+        for (int i = 0; i < strs.size(); i++) {
+            s = strs[i];
+            res += s;
+            if (i < strs.size() - 1) res += splitter;
+        }
+        return res;
+    }
+
+    // возвращает строку до первого втретившегося символа C
+    std::string toc(std::string str, char C)
+    {
+        std::string res = "";
+        for (char c : str) {
+            if (c == C) {
+                return res;
+            }
+            res += c;
+        }
+        return res;
+    }
+
+    // добовляет все элементы new_vec в конец вектора vec
+    template<typename T>
+    void push_vec(std::vector<T> *vec, std::vector<T> new_vec)
+    {
+        for (T el : new_vec) {
+            vec->push_back(el);
+        }
     }
 };
