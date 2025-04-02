@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 
 typedef          char   i8;
 typedef          short  i16;
@@ -11,6 +12,10 @@ typedef unsigned char   u8;
 typedef unsigned short  u16;
 typedef unsigned int    u32;
 typedef unsigned long   u64;
+
+#define de_cmd_txt_col(r, g, b) "\033[38;2;" << r << ";" << g << ";" << b << "m"
+#define de_cmd_txt_col_reset "\033[00m"
+#define de_cmd_back_col(r, g, b) "\033[48;2;" << r << ";" << g << ";" << b << "m"
 
 namespace de
 {
@@ -164,5 +169,17 @@ namespace de
         for (T el : new_vec) {
             vec->push_back(el);
         }
+    }
+    
+    // разделяет строку на две: до splitter, и после
+    std::pair<std::string, std::string> twsplit(std::string str, char splitter)
+    {
+        std::pair<std::string, std::string> res;
+
+        int i = 0;
+        for (; str[i] != splitter; i++) res.first += str[i];
+        for (i++; i < str.size(); i++)  res.second += str[i];
+
+        return res;
     }
 };
