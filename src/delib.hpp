@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 #include <vector>
 #include <map>
 
@@ -13,173 +14,53 @@ typedef unsigned short  u16;
 typedef unsigned int    u32;
 typedef unsigned long   u64;
 
-#define de_cmd_txt_col(r, g, b) "\033[38;2;" << r << ";" << g << ";" << b << "m"
-#define de_cmd_txt_col_reset "\033[00m"
-#define de_cmd_back_col(r, g, b) "\033[48;2;" << r << ";" << g << ";" << b << "m"
-
 namespace de
 {
-    /// @brief check if string is number
-    /// @param str checkble string
-    /// @return true if str is number, also return false
+    // set text color in console
+    inline std::string cmd_txt_col(u8 r, u8 g, u8 b);
+    // reset text color in console
+    inline std::string cmd_txt_col_reset();
+    // set background color in console
+    inline std::string cmd_back_col(u8 r, u8 g, u8 b);
+
 
     // проверяет что строка являеться числом
-    bool sisd(std::string str)
-    {
-        for (char c : str) {
-            if (!isdigit(c)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /// @brief remove from string choosed chars
-    /// @param str sourse string
-    /// @param cign char to ignore
-    /// @return str without all char matching to cing
+    bool sisd(std::string str);
+    // проверяет что строка являеться шеснацетеричным числом
+    bool sisd_hex(std::string str);
+    // проверяет что строка являеться двоичным числом
+    bool sisd_bin(std::string str);
 
     // возвращает строку без символов cing
-    std::string signore(std::string str, char cign)
-    {
-        std::string res;
-
-        for (char c : str) {
-            if (c == cign) continue;
-            res += c;
-        }
-
-        return res;
-    }
-
-    /// @brief slise of string
-    /// @param str sourse string
-    /// @param start index start of slise
-    /// @param end index end of slise (not be included in result string!!!)
-    /// @return string slise from start index to end index
+    std::string signore(std::string str, char cign);
 
     // срез строки от start до end, не включая end
-    std::string slise(std::string str, int start, int end)
-    {
-        std::string res;
-
-        if (end == -1) end = str.size();
-        for (int i = start; i < end; i++) {
-            res += str[i];
-        } 
-        return res;
-    }
+    std::string slise(std::string str, int start, int end);
 
     // срез вектора от start до end, не включая end
     template<typename T>
-    std::vector<T> slise(std::vector<T> vec, int start, int end)
-    {
-        std::vector<T> res;
-
-        if (end == -1) end = vec.size();
-        for (int i = start; i < end; i++) {
-            res.push_back(vec[i]);
-        } 
-        return res;
-    }
-
-    /// @brief return string without spaces in start and end
-    /// @param str sourse string
-    /// @return string without spaces in start and end
+    std::vector<T> slise(std::vector<T> vec, int start, int end);
 
     // возвращает строку без пробелов в начале и конце
-    std::string trim(std::string str)
-    {
-        if (str.empty()) return "";
-        std::string res = "";
-        u32 start = 0;
-        u32 end = str.size()-1;
-
-        while (str[start] == ' ') start++;
-        while (str[end] == ' ')   end--;
-        for (int i = start; i < end+1; i++) {
-            res += str[i];
-        }
-        return res;
-    }
-
-    // складывает a и b в пределах от minlimit до maxlimit
-    int atl(int a, int b, int minlimit, int maxlimit)
-    {
-        if (a + b > maxlimit)
-            return maxlimit;
-        if (a + b < minlimit)
-            return minlimit;
-        return a + b;
-    }
+    std::string trim(std::string str);
 
     // разделяет строку по символу splitter
-    std::vector<std::string> split(std::string str, char splitter)
-    {
-        std::vector<std::string> res {};
-        std::string buf = "";
-
-        for (char c : str) {
-            if (c == splitter) {
-                if (!buf.empty()) {
-                    res.push_back(buf);
-                    buf = "";
-                    continue;
-                }
-            }
-            buf += c;
-        }
-        if (!buf.empty()) {
-            res.push_back(buf);
-        }
-        return res;
-    }
+    std::vector<std::string> split(std::string str, char splitter);
 
     // функция обратная split
     // принимает вектор, а возвращает одну строку
-    std::string merger(std::vector<std::string> strs, char splitter)
-    {
-        std::string res = "";
-        std::string s = "";
-        for (int i = 0; i < strs.size(); i++) {
-            s = strs[i];
-            res += s;
-            if (i < strs.size() - 1) res += splitter;
-        }
-        return res;
-    }
+    std::string merge(std::vector<std::string> strs, char splitter);
 
     // возвращает строку до первого втретившегося символа C
-    std::string toc(std::string str, char C)
-    {
-        std::string res = "";
-        for (char c : str) {
-            if (c == C) {
-                return res;
-            }
-            res += c;
-        }
-        return res;
-    }
+    std::string toc(std::string str, char C);
+
+    // возвращает строку после первого втретившегося символа C
+    std::string aftc(std::string str, char C);
 
     // добовляет все элементы new_vec в конец вектора vec
     template<typename T>
-    void push_vec(std::vector<T> *vec, std::vector<T> new_vec)
-    {
-        for (T el : new_vec) {
-            vec->push_back(el);
-        }
-    }
+    void push_vec(std::vector<T> *vec, std::vector<T> new_vec);
     
-    // разделяет строку на две: до splitter, и после
-    std::pair<std::string, std::string> twsplit(std::string str, char splitter)
-    {
-        std::pair<std::string, std::string> res;
-
-        int i = 0;
-        for (; str[i] != splitter; i++) res.first += str[i];
-        for (i++; i < str.size(); i++)  res.second += str[i];
-
-        return res;
-    }
-};
+    // разделяет строку на две: до splitter, и после, не включая splitter
+    std::pair<std::string, std::string> twsplit(std::string str, char splitter);
+}
