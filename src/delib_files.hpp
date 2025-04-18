@@ -14,6 +14,9 @@ namespace de
 
     // возвращает вектор строк файла
     std::vector<std::string> file_get_lines(std::string name);
+
+    // возвращает путь до файла, без названия самого файла
+    std::string get_file_path(std::string name);
 }
 
 std::string de::file_get_text(std::string name)
@@ -69,4 +72,11 @@ std::vector<std::string> de::file_get_lines(std::string name)
     res.push_back(line);
     file.close();
     return res;
+}
+
+std::string de::get_file_path(std::string path)
+{
+    int i = path.size()-1;
+    while (path[i] != '/') {i--;}
+    return de::slise(path, 0, i+1);
 }
