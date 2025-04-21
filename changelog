@@ -1,3 +1,8 @@
+DELIB 1.6.0
+  ru:
+    добавлен класс ExBuf в exbuf.hpp
+      (по сути это тот же std::vector, но мой)
+
 DELIB 1.5.1
   ru:
     В delib_files.hpp добавлена функция get_file_path,
